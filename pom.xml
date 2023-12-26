@@ -6,6 +6,13 @@
   <version>2.24.1-CLOUD</version>
   <packaging>pom</packaging>
   <name>GeoServer upstream dependencies</name>
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub Packages</name>
+      <url>https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver</url>
+    </repository>
+  </distributionManagement>
   <modules>
     <!-- modules modified in the geoserver-cloud_integration branch -->
     <module>geoserver/src</module>

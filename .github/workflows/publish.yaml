@@ -1,0 +1,47 @@
+# Builds and pushes docker images on main and tags
+
+name: Build on any branch
+on:
+  push:
+    branches:
+      - 'main'
+    tags:
+      - '*'
+    paths:
+      - "Makefile"
+      - "pom.xml"
+      - ".github/workflows/build.yaml"
+      - "geoserver/**"
+
+jobs:
+  build:
+    name: Build and publish to github packages
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        cache: 'maven'
+
+    - name: Build customized GeoServer version
+      run: |
+        ./mvnw clean install -DskipTests -ntp -T4 -U 
+
+    - name: Publish package
+      run: |
+        ./mvnw --batch-mode deploy -DskipTests -ntp \
+        -DaltDeploymentRepository=github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver 
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Remove project jars from cached repository
+      run: |
+        rm -rf ~/.m2/repository/org/geoserver
+        find ~/.m2/repository -name "*SNAPSHOT*" -type d | xargs rm -rf {}
