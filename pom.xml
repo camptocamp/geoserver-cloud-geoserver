@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.geoserver.cloud</groupId>
   <artifactId>gs-upstream</artifactId>
-  <version>2.24.1-CLOUD</version>
+  <version>2.24.2-CLOUD</version>
   <packaging>pom</packaging>
   <name>GeoServer upstream dependencies</name>
   <distributionManagement>
