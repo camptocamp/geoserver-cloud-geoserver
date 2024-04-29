@@ -31,6 +31,7 @@
     <module>geoserver/src/extension/wps</module>
     <module>geoserver/src/extension/importer</module>
     <module>geoserver/src/community/flatgeobuf</module>
+    <module>geoserver/src/community/graticule</module>
     <module>geoserver/src/community/gwc-azure-blob</module>
     <module>geoserver/src/community/cog</module>
   </modules>
