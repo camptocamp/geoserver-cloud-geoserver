@@ -20,6 +20,7 @@
     <module>geoserver/src/community/jdbcstore</module>
     <module>geoserver/src/community/pgraster</module>
     <module>geoserver/src/community/datadir-catalog-loader</module>
+    <module>geoserver/src/community/security</module>
     <!-- all other required deps -->
     <module>geoserver/src/extension/authkey</module>
     <module>geoserver/src/extension/web-resource</module>
