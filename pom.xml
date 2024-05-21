@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.geoserver.cloud</groupId>
   <artifactId>gs-upstream</artifactId>
-  <version>2.25.0.2-CLOUD</version>
+  <version>2.25.0.3-CLOUD</version>
   <packaging>pom</packaging>
   <name>GeoServer upstream dependencies</name>
   <distributionManagement>
@@ -20,7 +20,6 @@
     <module>geoserver/src/community/jdbcstore</module>
     <module>geoserver/src/community/pgraster</module>
     <module>geoserver/src/community/datadir-catalog-loader</module>
-    <module>geoserver/src/community/security</module>
     <!-- all other required deps -->
     <module>geoserver/src/extension/authkey</module>
     <module>geoserver/src/extension/web-resource</module>
@@ -35,5 +34,8 @@
     <module>geoserver/src/community/graticule</module>
     <module>geoserver/src/community/gwc-azure-blob</module>
     <module>geoserver/src/community/cog</module>
+    <module>geoserver/src/community/security</module>
+    <module>geoserver/src/community/security/oauth2</module>
+    <module>geoserver/src/community/security/oauth2-geonode</module>
   </modules>
 </project>
