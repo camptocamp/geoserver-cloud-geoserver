@@ -37,5 +37,7 @@
     <module>geoserver/src/community/security</module>
     <module>geoserver/src/community/security/oauth2</module>
     <module>geoserver/src/community/security/oauth2-geonode</module>
+    <module>geoserver/src/extension/app-schema</module>
+    <module>geoserver/src/community/ogcapi</module>
   </modules>
 </project>
