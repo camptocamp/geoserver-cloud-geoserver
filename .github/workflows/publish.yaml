@@ -25,13 +25,9 @@ jobs:
         java-version: '21'
         cache: 'maven'
 
-    - name: Build customized GeoServer version
+    - name: Deploy to github packages maven repo
       run: |
-        ./mvnw clean install -DskipTests -ntp -T4 -U 
-
-    - name: Publish package
-      run: |
-        ./mvnw --batch-mode deploy -DskipTests -ntp -fae -Dmaven.resolver.transport=wagon \
+        ./mvnw deploy --batch-mode -DskipTests -ntp -fae -Dmaven.resolver.transport=wagon \
         -DaltDeploymentRepository=github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
