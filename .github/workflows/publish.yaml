@@ -31,7 +31,7 @@ jobs:
 
     - name: Publish package
       run: |
-        ./mvnw --batch-mode deploy -DskipTests -ntp \
+        ./mvnw --batch-mode deploy -DskipTests -ntp -fae \
         -DaltDeploymentRepository=github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
