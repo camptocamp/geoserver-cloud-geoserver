@@ -27,7 +27,10 @@ jobs:
 
     - name: Deploy to github packages maven repo
       run: |
-        ./mvnw deploy --batch-mode -DskipTests -ntp -fae -Dmaven.resolver.transport=wagon \
+        ./mvnw deploy \
+        --batch-mode -DskipTests -ntp -fae -Dmaven.resolver.transport=wagon \
+        -DdeployAtEnd=true \
+        -DretryFailedDeploymentCount=3 \
         -DaltDeploymentRepository=github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
