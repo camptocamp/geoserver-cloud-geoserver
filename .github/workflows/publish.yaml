@@ -27,11 +27,13 @@ jobs:
 
     - name: Deploy to github packages maven repo
       run: |
-        ./mvnw deploy \
-        --batch-mode -DskipTests -ntp -fae -Dmaven.resolver.transport=wagon \
+        ./mvnw deploy -f geoserver/src/pom.xml --batch-mode -DskipTests -ntp -fae \
+        -PallExtensions,communityRelease \
+        -Dsort.skip=true -Dspotless.apply.skip=true \
         -DretryFailedDeploymentCount=10 \
         -DallowIncompleteProjects=true \
-        -DaltDeploymentRepository=github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver 
+        -DaltDeploymentRepository="github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver" \
+        -Dmaven.resolver.transport=wagon
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
