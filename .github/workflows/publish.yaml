@@ -30,6 +30,7 @@ jobs:
         ./mvnw deploy \
         --batch-mode -DskipTests -ntp -fae -Dmaven.resolver.transport=wagon \
         -DretryFailedDeploymentCount=10 \
+        -DallowIncompleteProjects=true \
         -DaltDeploymentRepository=github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
