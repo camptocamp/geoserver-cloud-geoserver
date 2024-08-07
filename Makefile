@@ -1,7 +1,3 @@
-EXTENSIONS="app-schema,authkey,charts,css,csw,db2,dxf,h2,excel,feature-pregeneralized,gdal,geopkg-output,grib,gwc-s3,importer,inspire,jp2k,libjpeg-turbo,mapml,mbstyle,mongodb,mysql,netcdf,netcdf-out,oracle,params-extractor,printing,querylayer,rat,sldService,sqlserver,vectortiles,wcs2_0-eo,web-resource,wmts-multi-dimensional,wps,wps-download,wps-jdbc,ysld"
-
-COMMUNITY_MODULES="backup-restore,cog,colormap,datadir-catalog-loader,dds,dyndimension,features-autopopulate,features-templating,flatgeobuf,gdal,geopkg,gpx,graticule,gwc-azure-blob,gwc-sqlite,importer-jdbc,jdbcconfig,jdbcstore,jwt-headers,mbtiles,mbtiles-store,ncwms,ghrsst,ogcapi,pgraster,security,spatialjson,vsi,webp,wfs-freemarker,wps-longitudinal-profile"
-
 VERSION=`./mvnw help:evaluate -f geoserver/src/pom.xml -Dexpression=project.version -q -DforceStdout`
 
 .PHONY: install
@@ -16,13 +12,13 @@ install-core:
 install-extensions:
 	./mvnw install -f geoserver/src/extension/pom.xml --batch-mode -DskipTests -ntp -fae \
         -Dsort.skip=true -Dspotless.apply.skip=true \
-        -P$(EXTENSIONS)
+        -Prelease
 
 .PHONY: install-community
 install-community:
 	./mvnw install -f geoserver/src/community/pom.xml --batch-mode -DskipTests -ntp -fae \
         -Dsort.skip=true -Dspotless.apply.skip=true \
-        -P$(COMMUNITY_MODULES)
+        -PcommunityRelease
 
 .PHONY: deploy
 deploy:
@@ -32,7 +28,7 @@ deploy:
         -DallowIncompleteProjects=true \
         -DaltDeploymentRepository='github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver' \
         -Dmaven.resolver.transport=wagon \
-        -P$(EXTENSIONS),$(COMMUNITY_MODULES)
+        -Prelease,communityRelease
 
 
 .PHONY: purge-dependencies
