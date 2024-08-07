@@ -25,36 +25,14 @@ install-community:
         -P$(COMMUNITY_MODULES)
 
 .PHONY: deploy
-deploy: deploy-core deploy-extensions deploy-community
-
-.PHONY: deploy-core
-deploy-core:
+deploy:
 	./mvnw deploy -f geoserver/src/pom.xml --batch-mode -DskipTests -ntp -fae \
         -Dsort.skip=true -Dspotless.apply.skip=true \
         -DretryFailedDeploymentCount=10 \
         -DallowIncompleteProjects=true \
         -DaltDeploymentRepository='github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver' \
-        -Dmaven.resolver.transport=wagon
-
-.PHONY: deploy-extensions
-deploy-extensions:
-	./mvnw deploy -f geoserver/src/extension/pom.xml --batch-mode -DskipTests -ntp -fae \
-        -Dsort.skip=true -Dspotless.apply.skip=true \
-        -DretryFailedDeploymentCount=10 \
-        -DallowIncompleteProjects=true \
-        -DaltDeploymentRepository='github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver' \
         -Dmaven.resolver.transport=wagon \
-        -P$(EXTENSIONS)
-
-.PHONY: deploy-community
-deploy-community:
-	./mvnw deploy -f geoserver/src/community/pom.xml --batch-mode -DskipTests -ntp -fae \
-        -Dsort.skip=true -Dspotless.apply.skip=true \
-        -DretryFailedDeploymentCount=10 \
-        -DallowIncompleteProjects=true \
-        -DaltDeploymentRepository='github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver' \
-        -Dmaven.resolver.transport=wagon \
-        -P$(COMMUNITY_MODULES)
+        -P$(EXTENSIONS),$(COMMUNITY_MODULES)
 
 
 .PHONY: purge-dependencies
