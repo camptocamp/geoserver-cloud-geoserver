@@ -3,9 +3,6 @@
 name: Build on any branch
 on:
   push:
-    branches:
-      - 'main'
-      - 'stable'
     tags:
       - '*'
 jobs:
