@@ -18,7 +18,7 @@ install-extensions:
 install-community:
 	./mvnw install -f geoserver/src/community/pom.xml --batch-mode -DskipTests -ntp -fae \
         -Dsort.skip=true -Dspotless.apply.skip=true \
-        -PcommunityRelease
+        -PcommunityReleaseCloud
 
 .PHONY: deploy
 deploy:
@@ -28,7 +28,7 @@ deploy:
         -DallowIncompleteProjects=true \
         -DaltDeploymentRepository='github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver' \
         -Dmaven.resolver.transport=wagon \
-        -Prelease,communityRelease
+        -Prelease,communityReleaseCloud
 
 
 .PHONY: purge-dependencies
