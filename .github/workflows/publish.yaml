@@ -3,6 +3,8 @@
 name: Build on any branch
 on:
   push:
+    branches:
+      - '2.26.x'
     tags:
       - '*'
 jobs:
