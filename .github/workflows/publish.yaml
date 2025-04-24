@@ -1,6 +1,6 @@
 # Builds and pushes docker images on main and tags
 
-name: Build on any branch
+name: Deploy
 on:
   push:
     branches:
