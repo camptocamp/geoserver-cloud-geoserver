@@ -28,7 +28,8 @@ deploy:
         -DallowIncompleteProjects=true \
         -DaltDeploymentRepository='github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver' \
         -Dmaven.resolver.transport=wagon \
-        -Prelease,communityReleaseCloud
+        -Prelease,communityReleaseCloud \
+        -T1C
 
 
 .PHONY: purge-dependencies
