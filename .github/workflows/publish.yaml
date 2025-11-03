@@ -6,6 +6,7 @@ on:
     branches:
       - 'main'
       - '2.27.x'
+      - '2.28.x'
     tags:
       - '*'
 jobs:
