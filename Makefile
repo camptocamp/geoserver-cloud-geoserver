@@ -22,14 +22,13 @@ install-community:
 
 .PHONY: deploy
 deploy:
-	./mvnw deploy -f geoserver/src/pom.xml --batch-mode -DskipTests -ntp -fae \
+	./mvnw deploy -f geoserver/src/pom.xml --batch-mode -DskipTests -ntp \
         -Dsort.skip=true -Dspotless.apply.skip=true \
         -DretryFailedDeploymentCount=10 \
         -DallowIncompleteProjects=true \
         -DaltDeploymentRepository='github::https://maven.pkg.github.com/camptocamp/geoserver-cloud-geoserver' \
         -Dmaven.resolver.transport=wagon \
-        -Prelease,communityRelease \
-        -T1C
+        -Prelease,pending,communityRelease
 
 
 .PHONY: purge-dependencies

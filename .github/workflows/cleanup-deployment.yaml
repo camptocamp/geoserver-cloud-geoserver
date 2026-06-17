@@ -1,0 +1,94 @@
+# Manually delete a published Maven package version from GitHub Packages.
+#
+# Use this to recover from a partial/failed release deploy: GitHub Packages makes
+# release (non-SNAPSHOT) versions immutable, so a deploy interrupted mid-way leaves
+# some modules published and the version cannot be re-deployed (409 Conflict). This
+# workflow deletes the given version from every Maven package owned by THIS repository
+# so the deploy can be re-run cleanly.
+#
+# Safety:
+#   - Only packages whose linked repository is this repo are touched. Other
+#     deployments in the organization are never matched, even if they share a name.
+#   - Dry run is the default: the first run only lists what would be deleted. Re-run
+#     with dry_run=false to actually delete.
+#
+# Token: deleting org packages may need broader access than the default GITHUB_TOKEN
+# grants. If a run fails to list or delete with a 403, add a PAT secret named
+# PACKAGES_ADMIN_TOKEN with the read:packages and delete:packages scopes; it is used
+# in preference to GITHUB_TOKEN when present.
+
+name: Clean up deployment
+
+run-name: "Cleanup ${{ inputs.version }} (dry-run=${{ inputs.dry_run }})"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Exact package version to delete (e.g. 3.0.0-CLOUD)"
+        required: true
+        type: string
+      dry_run:
+        description: "List what would be deleted without deleting"
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  packages: write
+
+jobs:
+  cleanup:
+    name: Delete package version
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete version from this repository's Maven packages
+        env:
+          GH_TOKEN: ${{ secrets.PACKAGES_ADMIN_TOKEN || secrets.GITHUB_TOKEN }}
+          ORG: ${{ github.repository_owner }}
+          REPO: ${{ github.repository }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${VERSION// /}" ]; then
+            echo "::error::version input is empty"
+            exit 1
+          fi
+          echo "Repository : $REPO"
+          echo "Version    : $VERSION"
+          echo "Dry run    : $DRY_RUN"
+
+          # Maven packages in the org that are linked to THIS repository only.
+          # env.REPO is read by jq directly, so the input cannot inject into the filter.
+          mapfile -t packages < <(
+            gh api --paginate "/orgs/$ORG/packages?package_type=maven" \
+              --jq '.[] | select(.repository.full_name == env.REPO) | .name'
+          )
+          echo "Found ${#packages[@]} Maven package(s) linked to $REPO"
+
+          matched=0
+          deleted=0
+          for pkg in "${packages[@]}"; do
+            enc=$(jq -rn --arg p "$pkg" '$p|@uri')
+            ids=$(
+              gh api --paginate "/orgs/$ORG/packages/maven/$enc/versions" \
+                --jq '.[] | select(.name == env.VERSION) | .id'
+            )
+            for id in $ids; do
+              matched=$((matched + 1))
+              if [ "$DRY_RUN" = "true" ]; then
+                echo "[dry-run] would delete $pkg $VERSION (id=$id)"
+              else
+                echo "Deleting $pkg $VERSION (id=$id)"
+                gh api -X DELETE "/orgs/$ORG/packages/maven/$enc/versions/$id"
+                deleted=$((deleted + 1))
+              fi
+            done
+          done
+
+          echo "Matched $matched version(s); deleted $deleted."
+          if [ "$matched" -eq 0 ]; then
+            echo "::warning::No package linked to $REPO has version $VERSION (nothing to delete)"
+          fi
