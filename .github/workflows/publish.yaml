@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - 'main'
-      - '2.27.x'
       - '2.28.x'
+      - '3.0.x'
     tags:
       - '*'
 jobs:
